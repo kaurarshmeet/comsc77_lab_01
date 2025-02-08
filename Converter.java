@@ -2,6 +2,7 @@ public class Converter {
 
     /**
      * Main method asks user for input in binary or decimal.
+     * Use this to test.
      * @param args
      */
     public static void main(String[] args) {
