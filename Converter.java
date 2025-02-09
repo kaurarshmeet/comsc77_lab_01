@@ -73,8 +73,20 @@ public class Converter {
     }
 
     //TODO: kvrm7
+    // Converts a decimal number to hexadecimal
     public String decimalToHex(int decimal) {
-        return "";
+        if (decimal == 0) return "0";
+        
+        String hexDigits = "0123456789ABCDEF";
+        StringBuilder hex = new StringBuilder();
+      
+        // Convert decimal to hexadecimal by repeatedly dividing by 16
+        while (decimal > 0) {
+            hex.insert(0, hexDigits.charAt(decimal % 16));
+            decimal /= 16;
+        }
+        
+        return hex.toString();
     }
 
     //TODO: Arshmeet
@@ -141,8 +153,12 @@ public class Converter {
         }
     }
 
-    //TODO: kvrm7
+    //TODO: kvrm7 
+    // Converts a binary string to hexadecimal
+    public static String binaryToHex(String binary) {
+        int decimalValue = Integer.parseInt(binary, 2);
+        return decimalToHex(decimalValue);
     public String binaryToHex(String binary){
-        return "";
+        
     }
 }
