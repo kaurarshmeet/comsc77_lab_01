@@ -83,8 +83,62 @@ public class Converter {
     }
 
     //TODO: bheraz2
-    public String binaryToOctal(String binary){
-      
+    public static String binaryToOctalIntegerPart(String binary) {
+        
+        int padding = (3 - (binary.length() % 3)) % 3; //Number of zeros needed to make lenght in binary
+        StringBuilder paddedBinary = new StringBuilder();
+        //adds values until append values is 0
+        while (padding-- > 0) {
+            paddedBinary.append("0");
+        }
+        paddedBinary.append(binary);
+        
+        StringBuilder octalInteger = new StringBuilder();
+        
+        // Process every 3 bits as a group
+        for (int i = 0; i < paddedBinary.length(); i += 3) {
+            String group = paddedBinary.substring(i, i + 3);
+            int decimalValue = Integer.parseInt(group, 2);  // Convert binary group to decimal
+            octalInteger.append(decimalValue);
+        }
+
+        return octalInteger.toString();
+    }
+
+    // Function to convert the fractional part of the binary number to octal
+    public static String binaryToOctalFractionalPart(String binary) {
+        StringBuilder octalFraction = new StringBuilder();
+        double fractionalPart = Integer.parseInt(binary, 2) / Math.pow(2, binary.length());
+
+        // Convert the fractional part of the binary to octal
+        while (fractionalPart != 0) {
+            fractionalPart *= 8;
+            int integerPart = (int) fractionalPart;
+            octalFraction.append(integerPart);
+            fractionalPart -= integerPart;
+        }
+
+        return octalFraction.toString();
+    }
+
+    // Function to convert a complete binary number (both integer and fractional parts) to octal
+    public static String binaryToOctal(String binary) {
+        String[] parts = binary.split("\\.");  // Split binary input into integer and fractional parts
+        String integerPart = parts[0];
+        String fractionalPart = parts.length > 1 ? parts[1] : "";
+
+        // Convert the integer part of the binary to octal
+        String octalInteger = binaryToOctalIntegerPart(integerPart);
+        
+        // Convert the fractional part of the binary to octal
+        String octalFraction = binaryToOctalFractionalPart(fractionalPart);
+        
+        // Combine integer and fractional parts
+        if (octalFraction.isEmpty()) {
+            return octalInteger;
+        } else {
+            return octalInteger + "." + octalFraction;
+        }
     }
 
     //TODO: kvrm7
