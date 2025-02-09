@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Converter {
 
     /**
@@ -14,6 +16,7 @@ public class Converter {
         // => will call 3 other methods
 
         // TODO: Use this to test your methods.
+       
     }
 
 
@@ -23,8 +26,50 @@ public class Converter {
     }
 
     //TODO: bheraz2
-    public String decimalToOctal(int decimal) {
-        return "";
+    public static String decimalToOctalIntegerPart(int decimal) {
+        if (decimal == 0) {
+            return "0";
+        }
+        
+        String octalInteger = "";
+        
+        while (decimal > 0) {
+            int remainder = decimal % 8;
+            octalInteger = remainder + octalInteger;
+            decimal = decimal / 8;
+        }
+        
+        return octalInteger;
+    }
+
+    // function to convert the fractional part of the decimal number to octal
+    public static String decimalToOctalFractionalPart(double fractionalPart, int precision) {
+        String octalFraction = "";
+
+        while (precision > 0) {
+            fractionalPart *= 8;
+            int integerPart = (int) fractionalPart;
+            octalFraction += integerPart;
+            fractionalPart -= integerPart;
+            precision--;
+        }
+
+        return octalFraction;
+    }
+
+    // unction to convert a complete decimal number (both integer and fractional parts) to octal
+    public static String decimalToOctal(double decimal, int precision) {
+        int integerPart = (int) decimal;
+        double fractionalPart = decimal - integerPart;
+
+        String octalInteger = decimalToOctalIntegerPart(integerPart);
+        String octalFraction = decimalToOctalFractionalPart(fractionalPart, precision);
+
+        if (octalFraction.isEmpty()) {
+            return octalInteger;
+        } else {
+            return octalInteger + "." + octalFraction;
+        }
     }
 
     //TODO: kvrm7
@@ -39,18 +84,7 @@ public class Converter {
 
     //TODO: bheraz2
     public String binaryToOctal(String binary){
-        int length = binary.length(); 
-        int padding = (3-(length % 3)) % 3; // calculate required padding, number of zeros needed
-        StringBuilder paddedBinary = new StringBuilder();
-
-        //while loop tuns until padding becomes zero, checks if it still needs to add
-        while (padding --> 0){
-            paddedBinary.append("0");
-        }
-        paddedBinary.append(binary);
-
-
-        return "";
+      
     }
 
     //TODO: kvrm7
