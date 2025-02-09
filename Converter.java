@@ -39,6 +39,17 @@ public class Converter {
 
     //TODO: bheraz2
     public String binaryToOctal(String binary){
+        int length = binary.length(); 
+        int padding = (3-(length % 3)) % 3; // calculate required padding, number of zeros needed
+        StringBuilder paddedBinary = new StringBuilder();
+
+        //while loop tuns until padding becomes zero, checks if it still needs to add
+        while (padding --> 0){
+            paddedBinary.append("0");
+        }
+        paddedBinary.append(binary);
+
+
         return "";
     }
 
