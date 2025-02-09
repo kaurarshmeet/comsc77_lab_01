@@ -75,18 +75,18 @@ public class Converter {
     //TODO: kvrm7
     // Converts a decimal number to hexadecimal
     public String decimalToHex(int decimal) {
-        if (decimal == 0) return "0";
-        
-        String hexDigits = "0123456789ABCDEF";
-        StringBuilder hex = new StringBuilder();
-      
-        // Convert decimal to hexadecimal by repeatedly dividing by 16
-        while (decimal > 0) {
+        if (decimal == 0) return "0"; // Special case: 0 in decimal is 0 in hexadecimal
+
+        StringBuilder hex = new StringBuilder(); // Use StringBuilder to build the hexadecimal string
+        String hexDigits = "0123456789ABCDEF"; // Hexadecimal digits
+
+       while (decimal > 0) {
+           // Insert the hexadecimal digit corresponding to the remainder of decimal divided by 16
             hex.insert(0, hexDigits.charAt(decimal % 16));
-            decimal /= 16;
+            decimal /= 16; // Divide the decimal number by 16
         }
         
-        return hex.toString();
+        return hex.toString(); // Return the hexadecimal string
     }
 
     //TODO: Arshmeet
