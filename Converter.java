@@ -151,22 +151,41 @@ public class Converter {
 
 
     //TODO: kvrm7
-    // Converts a decimal number to hexadecimal
-    public static String decimalToHex(int decimal) {
-        if (decimal == 0) return "0"; // Special case: 0 in decimal is 0 in hexadecimal
+    // Convert a decimal number (including fractional part) to hexadecimal
+    public static String decimalToHex(double decimal, int precision) {
+        int integerPart = (int) decimal; // Extract integer part
+        double fractionalPart = decimal - integerPart; // Extract fractional part
 
-        StringBuilder hex = new StringBuilder(); // Use StringBuilder to build the hexadecimal string
-        String hexDigits = "0123456789ABCDEF"; // Hexadecimal digits
+        String hexInteger = decimalToHex(integerPart); // Convert integer part to hex
+        String hexFraction = decimalToHexFractionalPart(fractionalPart, precision); // Convert fractional part to hex
 
-        while (decimal > 0) {
-            // Insert the hexadecimal digit corresponding to the remainder of decimal divided by 16
-            hex.insert(0, hexDigits.charAt(decimal % 16));
-            decimal /= 16; // Divide the decimal number by 16
-        }
 
-        return hex.toString(); // Return the hexadecimal string
+        return hexFraction.isEmpty() ? hexInteger : hexInteger + "." + hexFraction;
     }
 
+    // Convert an integer decimal number to hexadecimal
+    private static String decimalToHex(int decimal) {
+        if (decimal == 0) return "0"; // Handle zero case
+        StringBuilder hex = new StringBuilder();
+        String hexDigits = "0123456789ABCDEF";
+        while (decimal > 0) {
+            hex.insert(0, hexDigits.charAt(decimal % 16)); // Get remainder and convert to hex digit
+            decimal /= 16;  // Divide by 16 to process the next digit
+        }
+        return hex.toString();
+    }
+ // Convert the fractional part of a decimal number to hexadecimal
+    private static String decimalToHexFractionalPart(double fractionalPart, int precision) {
+        StringBuilder hexFraction = new StringBuilder();
+        while (precision > 0 && fractionalPart > 0) {
+            fractionalPart *= 16; // Multiply fractional part by 16
+            int integerPart = (int) fractionalPart; // Extract integer part
+            hexFraction.append(Integer.toHexString(integerPart).toUpperCase()); // Convert to hex digit
+            fractionalPart -= integerPart; // Remove integer part from fractional part
+            precision--; // Decrease precision counter
+        }
+        return hexFraction.toString();
+    }
     /**
      * Converts a binary number to a decimal.
      * @param binary the binary number
@@ -270,12 +289,32 @@ public class Converter {
     }
 
     //TODO: kvrm7 
-    // Converts a binary string to hexadecimal
+    // Convert a binary number (including fractional part) to hexadecimal
     public static String binaryToHex(String binary) {
-        int decimalValue = Integer.parseInt(binary, 2);
-        return decimalToHex(decimalValue);
-//        public String binaryToHex(String binary){
-//            return "";
-//        }
+        String[] parts = binary.split("\\."); // Split binary number into integer and fractional parts
+        String integerPart = parts[0];
+        String fractionalPart = parts.length > 1 ? parts[1] : "";
+
+        String hexInteger = binaryToHexIntegerPart(integerPart); // Convert integer part to hex
+        String hexFraction = binaryToHexFractionalPart(fractionalPart); // Convert fractional part to hex
+
+        return hexFraction.isEmpty() ? hexInteger : hexInteger + "." + hexFraction;
+    }
+
+    // Convert the integer part of a binary number to hexadecimal
+    private static String binaryToHexIntegerPart(String binary) {
+        int decimalValue = Integer.parseInt(binary, 2); // Convert binary to decimal
+        return decimalToHex(decimalValue); // Convert decimal to hex
+    }
+
+    // Convert the fractional part of a binary number to hexadecimal
+    private static String binaryToHexFractionalPart(String binaryFraction) {
+        double fractionalDecimal = 0.0;
+        for (int i = 0; i < binaryFraction.length(); i++) {
+            if (binaryFraction.charAt(i) == '1') {
+                fractionalDecimal += Math.pow(2, -(i + 1)); // Convert binary fraction to decimal fraction
+            }
+        }
+        return decimalToHexFractionalPart(fractionalDecimal, 5); // Convert decimal fraction to hex with precision 5
     }
 }
