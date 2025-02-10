@@ -5,6 +5,7 @@ public class Converter {
     /**
      * Main method asks user for input in binary or decimal.
      * Use this to test.
+     *
      * @param args
      */
     public static void main(String[] args) {
@@ -16,29 +17,97 @@ public class Converter {
         // => will call 3 other methods
 
         // TODO: Use this to test your methods.
-       
+        System.out.println(decimalToBinary(70.321));
     }
 
 
     //TODO: Arshmeet
-    public String decimalToBinary(int decimal){
-        return "";
+    /**
+     * Converts decimal to binary.
+     *
+     * @param decimal decimal number
+     * @return the binary equivalent.
+     * @author Arshmeet Kaur
+     */
+    public static String decimalToBinary(double decimal) {
+        if (decimal % 1  == 0) // if this is an integer, need only call the integer converter.
+            return decimalToBinaryInt((int) decimal);
+
+        // convert number to string, process integer and float parts seperately.
+        String decimal_string = Double.toString(decimal);
+        String[] parts = decimal_string.split("\\.");
+        String integerPart = decimalToBinaryInt(Integer.parseInt(parts[0]));
+        int precision = parts[1].length();
+        String fractionalPart = decimalToBinaryFloat(Double.parseDouble("0." + parts[1]), precision);
+        String result = integerPart + fractionalPart;
+        return result;
     }
+
+
+    /**
+     * Helper method.
+     * Uses division method convert integer to binary.
+     * @param integerPart integer.
+     * @return binary representation.
+     * @author Arshmeet Kaur
+     */
+    public static String decimalToBinaryInt(int integerPart) {
+        String result = "";
+
+        while (integerPart != 1 && integerPart != 0) {
+            int remainder = integerPart % 2;
+            integerPart = integerPart / 2;
+            result = Integer.toString(remainder) + result;
+        }
+
+        if (integerPart == 1)
+            result = Integer.toString(integerPart) + result;
+        return result;
+    }
+
+    /**
+     * Helper method. Uses multiplication method to convert fraction to binary.
+     * @param fractionalPart the fractional part of a decimal number.
+     * @return the binary representation.
+     * @author Arshmeet Kaur
+     */
+    public static String decimalToBinaryFloat(double fractionalPart, int precision) {
+        // precision = num of decimals in the original fraction
+        String result = "";
+
+        for (int i = 0; i < precision; i++ ) {
+
+            // multiply fraction by 2, figure out whether to store 0 or 1.
+            // update the fractional Part for the next loop.
+            double remainder = fractionalPart * 2;
+            if (remainder > 1) {
+                result = result + "1";
+                fractionalPart = (fractionalPart * 2) - 1;
+            } else {
+                result = result + "0";
+                fractionalPart = fractionalPart * 2;
+            }
+        }
+
+        return "." + result;
+    }
+
+
 
     //TODO: bheraz2
     public static String decimalToOctalIntegerPart(int decimal) {
         if (decimal == 0) {
             return "0";
         }
-        
+
         String octalInteger = "";
-        
+
         while (decimal > 0) {
             int remainder = decimal % 8;
             octalInteger = remainder + octalInteger;
             decimal = decimal / 8;
         }
-        
+
         return octalInteger;
     }
 
@@ -57,7 +126,7 @@ public class Converter {
         return octalFraction;
     }
 
-    // unction to convert a complete decimal number (both integer and fractional parts) to octal
+    // function to convert a complete decimal number (both integer and fractional parts) to octal
     public static String decimalToOctal(double decimal, int precision) {
         int integerPart = (int) decimal;
         double fractionalPart = decimal - integerPart;
@@ -74,29 +143,29 @@ public class Converter {
 
     //TODO: kvrm7
     // Converts a decimal number to hexadecimal
-    public String decimalToHex(int decimal) {
+    public static String decimalToHex(int decimal) {
         if (decimal == 0) return "0"; // Special case: 0 in decimal is 0 in hexadecimal
 
         StringBuilder hex = new StringBuilder(); // Use StringBuilder to build the hexadecimal string
         String hexDigits = "0123456789ABCDEF"; // Hexadecimal digits
 
-       while (decimal > 0) {
-           // Insert the hexadecimal digit corresponding to the remainder of decimal divided by 16
+        while (decimal > 0) {
+            // Insert the hexadecimal digit corresponding to the remainder of decimal divided by 16
             hex.insert(0, hexDigits.charAt(decimal % 16));
             decimal /= 16; // Divide the decimal number by 16
         }
-        
+
         return hex.toString(); // Return the hexadecimal string
     }
 
     //TODO: Arshmeet
-    public int binaryToDecimal(String binary){
+    public int binaryToDecimal(String binary) {
         return 0;
     }
 
     //TODO: bheraz2
     public static String binaryToOctalIntegerPart(String binary) {
-        
+
         int padding = (3 - (binary.length() % 3)) % 3; //Number of zeros needed to make lenght in binary
         StringBuilder paddedBinary = new StringBuilder();
         //adds values until append values is 0
@@ -104,9 +173,9 @@ public class Converter {
             paddedBinary.append("0");
         }
         paddedBinary.append(binary);
-        
+
         StringBuilder octalInteger = new StringBuilder();
-        
+
         // Process every 3 bits as a group
         for (int i = 0; i < paddedBinary.length(); i += 3) {
             String group = paddedBinary.substring(i, i + 3);
@@ -141,10 +210,10 @@ public class Converter {
 
         // Convert the integer part of the binary to octal
         String octalInteger = binaryToOctalIntegerPart(integerPart);
-        
+
         // Convert the fractional part of the binary to octal
         String octalFraction = binaryToOctalFractionalPart(fractionalPart);
-        
+
         // Combine integer and fractional parts
         if (octalFraction.isEmpty()) {
             return octalInteger;
@@ -158,7 +227,8 @@ public class Converter {
     public static String binaryToHex(String binary) {
         int decimalValue = Integer.parseInt(binary, 2);
         return decimalToHex(decimalValue);
-    public String binaryToHex(String binary){
-        
+//        public String binaryToHex(String binary){
+//            return "";
+//        }
     }
 }
