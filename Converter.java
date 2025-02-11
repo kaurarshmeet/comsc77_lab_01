@@ -23,12 +23,13 @@ public class Converter {
         // Decimal to Octal
         System.out.println("70.321 octal -> " + decimalToOctal(70.321,8));
         // Decimal to Hex
+        System.out.println("70.321 hex -> " + decimalToHex(70.321, 8));
 
         // Binary to Decimal
         System.out.println("1000110.01010010 decimal -> " + binaryToDecimal("1000110.01010010"));
         System.out.println("1000110.01010010 octal -> " + binaryToOctal("1000110.01010010"));
+        System.out.println("1000110.01010010 octal -> " + binaryToHex("1000110.01010010"));
     }
-
 
     /**
      * Converts decimal to binary.
