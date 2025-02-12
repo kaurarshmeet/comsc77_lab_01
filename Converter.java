@@ -9,26 +9,50 @@ public class Converter {
      * @param args
      */
     public static void main(String[] args) {
+
         // Use Scanner
-        //TODO: ask user to enter a number in binary or decimal.
-        //TODO: ask user what type of number it is
-        //TODO: check to make sure the number is legal (a decimal number contains only 0-9). If the number is not legal, it should error out!
-        //TODO: If the number is legal, convert the number to the other 3 types (Hint: There are a total of 4 types: binary, octal, hexadecimal, decimal)
-        // => will call 3 other methods
 
-        // TODO: Use this to test your methods.
+        // ask user to enter a number in binary or decimal.
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter a number (unsigned)!");
+        String number = scanner.nextLine();
 
-        // Decimal to Binary
-        System.out.println("70.321 binary -> " + decimalToBinary(70.321));
-        // Decimal to Octal
-        System.out.println("70.321 octal -> " + decimalToOctal(70.321,8));
-        // Decimal to Hex
-        System.out.println("70.321 hex -> " + decimalToHex(70.321, 8));
+        // ask user what type of number it is
+        System.out.println("What type of number is it? ");
+        String type = scanner.nextLine();
 
-        // Binary to Decimal
-        System.out.println("1000110.01010010 decimal -> " + binaryToDecimal("1000110.01010010"));
-        System.out.println("1000110.01010010 octal -> " + binaryToOctal("1000110.01010010"));
-        System.out.println("1000110.01010010 octal -> " + binaryToHex("1000110.01010010"));
+        if (type.equalsIgnoreCase("decimal")) {
+            // check if it's a legal number, then call the methods
+            String acceptable_decimal = "0123456789.";
+            if (containsOnly(number, acceptable_decimal)) {
+                double decimal = Double.parseDouble(number);
+                System.out.println("Binary: " + decimalToBinary(decimal, 8));
+                System.out.println("Octal: " + decimalToOctal(decimal, 8));
+                System.out.println("Hex: " + decimalToHex(decimal, 8));
+            } else {
+                throw new IllegalArgumentException("Not a valid decimal number.");
+            }
+        } else if (type.equalsIgnoreCase("binary")) {
+            // check if valid numbers
+            String acceptable_binary = "01.";
+            if (containsOnly(number, acceptable_binary)){
+                System.out.println("Decimal: " + binaryToDecimal(number));
+                System.out.println("Octal: " + binaryToOctal(number));
+                System.out.println("Hex: " + binaryToHex(number));
+            } else {
+                throw new IllegalArgumentException("Not a valid binary number.");
+            }
+        } else {
+            throw new IllegalArgumentException("Not a valid type. Binary or decimal only.");
+        }
+    }
+
+    public static boolean containsOnly(String test, String allowed) {
+        for(String c: test.split("")){
+            if (!allowed.contains(c))
+                return false;
+        }
+        return true;
     }
 
     /**
@@ -38,7 +62,7 @@ public class Converter {
      * @return the binary equivalent.
      * @author Arshmeet Kaur
      */
-    public static String decimalToBinary(double decimal) {
+    public static String decimalToBinary(double decimal, int precision) {
         if (decimal % 1  == 0) // if this is an integer, need only call the integer converter.
             return decimalToBinaryInt((int) decimal);
 
@@ -46,9 +70,6 @@ public class Converter {
         String decimal_string = Double.toString(decimal);
         String[] parts = decimal_string.split("\\.");
         String integerPart = decimalToBinaryInt(Integer.parseInt(parts[0]));
-        int precision = parts[1].length();
-        if (precision < 8)
-            precision = 8;
         String fractionalPart = decimalToBinaryFloat(Double.parseDouble("0." + parts[1]), precision);
         String result = integerPart + fractionalPart;
         return result;
