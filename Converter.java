@@ -1,5 +1,10 @@
 import java.util.Scanner;
 
+/**
+ * @author Arshmeet Kaur
+ * @author Bryan Heraz
+ * @author Khushi Verma
+ */
 public class Converter {
 
     /**
